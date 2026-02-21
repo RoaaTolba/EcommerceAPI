@@ -1,6 +1,11 @@
 ﻿namespace ecommerceAPI.Domain.Enums
 {
-    public class OrderStatus
+    public enum OrderStatus
     {
+        Pending,
+        Processing,
+        Shipped,
+        Delivered,
+        Cancelled
     }
 }

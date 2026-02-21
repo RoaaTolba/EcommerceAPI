@@ -1,11 +1,23 @@
 
+using ecommerceAPI.Data;
+using ecommerceAPI.Domain;
+using ecommerceAPI.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+
 namespace ecommerceAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // 1?? ??? DbContext ???? connection string ?? appsettings.json
+            builder.Services.AddDbContext<MyDBContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            );
 
             // Add services to the container.
 
@@ -15,8 +27,16 @@ namespace ecommerceAPI
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var service = scope.ServiceProvider;
+                var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = service.GetRequiredService<UserManager<User>>();
 
-            // Configure the HTTP request pipeline.
+                await SeedData.intialize(roleManager, userManager);
+            }
+
+            // Configure the HTTP request pipeline.  
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
