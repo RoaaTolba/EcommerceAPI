@@ -9,6 +9,6 @@
 
         //navigation property
         public Cart Cart { get; set; }
-        public Product product { get; set; }
+        public Order product { get; set; }
     }
 }
