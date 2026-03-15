@@ -11,8 +11,8 @@
         public int CategoryId { get; set; }
         public string productStatus { get; set; }
         public DateTime CreatedAt { get; set; }
-        public Category category { get; set; }
-        public ICollection<OrderItem> OrderItem { get; set; }
+        public Category Category { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
 
 
     }

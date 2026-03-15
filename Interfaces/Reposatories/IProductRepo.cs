@@ -1,4 +1,5 @@
 ﻿using ecommerceAPI.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerceAPI.Interfaces.Reposatories
 {
@@ -6,8 +7,8 @@ namespace ecommerceAPI.Interfaces.Reposatories
     {
         public Task<IEnumerable<Product>> GetAllProductsAsync();
         public Task AddAsync(Product product);
-        public void Update(Product product);
-        public bool Delete(Product product);
-        public Task<Product> GetByIdAsync(int id);
+        public void Update(int id,Product product);
+        public Task<bool> Delete(int id);
+        public Task GetByIdAsync(int id);
     }
 }

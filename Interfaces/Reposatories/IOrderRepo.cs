@@ -5,7 +5,7 @@ namespace ecommerceAPI.Interfaces.Reposatories
     public interface IOrderRepo
     {
         public Task<IEnumerable<Order>> GetAllOrdersAsync();
-        public Task AddAsync(Order order);
+        public Task<int> AddAsync(Order order);
         public Task<Order> GetByIdAsync(int id);
     }
 }

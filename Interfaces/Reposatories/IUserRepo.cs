@@ -5,6 +5,6 @@ namespace ecommerceAPI.Interfaces.Reposatories
     public interface IUserRepo
     {
         public Task<IEnumerable<User>> GetAllUsersAsync();
-        public Task<User> GetByIdAsync(int id);
+        public Task<User> GetByIdAsync(string id);
     }
 }

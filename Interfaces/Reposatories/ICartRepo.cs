@@ -4,10 +4,10 @@ namespace ecommerceAPI.Interfaces.Reposatories
 {
     public interface ICartRepo
     {
+        public Task<bool> AddAsync(Cart cart);
+        public Cart GetByUserId(string id);
         public Task<IEnumerable<Cart>> GetAllCartsAsync();
-        public Task AddAsync(Cart product);
-        public void Update(Cart product);
-        public bool Delete(Cart product);
-        public Cart GetById(int id);
+        public bool Delete(Cart cart);
+       // public bool Update(Cart Cart);
     }
 }
