@@ -1,6 +1,7 @@
 
-using ecommerceAPI.Data;
-using ecommerceAPI.Domain;
+using ecommerceAPI.Infrastructure;
+using ecommerceAPI.Infrastructure.Data;
+//using ecommerceAPI.Domain;
 using ecommerceAPI.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,9 @@ namespace ecommerceAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // 1?? ??? DbContext ???? connection string ?? appsettings.json
-            builder.Services.AddDbContext<MyDBContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-            );
+            //builder.Services.AddDbContext<MyDBContext>(options =>
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            //);
 
             // Add services to the container.
 
@@ -25,6 +26,7 @@ namespace ecommerceAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             var app = builder.Build();
             using (var scope = app.Services.CreateScope())

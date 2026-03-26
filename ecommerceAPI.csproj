@@ -18,4 +18,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ecommerceApi.Application\ecommerceAPI.Application.csproj" />
+    <ProjectReference Include="..\ecommerceApi.Domain\ecommerceAPI.Domain.csproj" />
+    <ProjectReference Include="..\ecommerceApi.Infrastructure\ecommerceAPI.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
