@@ -1,5 +1,7 @@
 
 //using ecommerceAPI.Domain;
+using AutoMapper;
+using ecommerceAPI.Application.Common.Mapping;
 using ecommerceAPI.Domain.Entities;
 using ecommerceAPI.Infrastructure;
 using ecommerceAPI.Infrastructure.Data;
@@ -25,7 +27,7 @@ namespace ecommerceAPI
             //);
 
             // Add services to the container.
-
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

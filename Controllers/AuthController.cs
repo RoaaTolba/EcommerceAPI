@@ -68,7 +68,7 @@ namespace ecommerceAPI.Controllers
 
         }
         [Authorize]
-        [HttpPut("ChangePassword")]
+        [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword(ChangePasswordDTO dto)
         {
             if (!ModelState.IsValid) 
@@ -81,27 +81,47 @@ namespace ecommerceAPI.Controllers
 
         }
         [HttpPost("forget-password")]
-        public async Task<IActionResult> ForgetPassword([FromBody] string email)
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordDto dto)
         {
-            await service.ForgetPasswordAsync(email);
+            await service.ForgetPasswordAsync(dto.Email);
             return Ok(new { message = "If email exists, reset link sent" });
         }
-        [Authorize]
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDTO dto)
         {
             await service.ResetPasswordAsync(dto.Email, dto.Token, dto.NewPassword);
             return Ok(new { message = "Password reset successfully" });
         }
+        [HttpGet("reset-password")]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            return Ok(new
+            {
+                Email = email,
+                Token = token
+            });
+        }
         [HttpGet("verify-email")]
-        public async Task<IActionResult> VerifyEmail(string email, string token)
+        public async Task<IActionResult> VerifyEmailOnDB(string email, string token)
         {
             var result = await service.VerifyEmail(email, token);
 
             if (!result.Success)
-                return BadRequest("Invalid or expired token");
+                return BadRequest(result.Message);
 
-            return Ok(new { message = "Email verified successfully" });
+            return Ok(new { message = "Email verified successfully." });
+        }
+        [Authorize]
+        [HttpPost("ResendVerifyEmail")]
+        public async Task<IActionResult> ResendVerificationMail(string email)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "Invalid token or user not found" });
+
+            await service.ResendVerificationEmail(email,userId);
+
+            return Ok(new { message = "Check your email." });
         }
         [Authorize]
         [HttpPost("refresh-token")]

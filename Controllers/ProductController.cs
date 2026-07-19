@@ -1,4 +1,6 @@
-﻿using ecommerceAPI.Application.DTOs.Category;
+﻿using ecommerceAPI.Application.Common.Pagination;
+using ecommerceAPI.Application.Common.Specification;
+using ecommerceAPI.Application.DTOs.Category;
 using ecommerceAPI.Application.DTOs.Products;
 using ecommerceAPI.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -21,9 +23,9 @@ namespace ecommerceAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> ShowAllProducts()
+        public async Task<ActionResult<PagedResponse<ProductDTO>>> ShowAllProducts([FromQuery] ProductSpecParams specParams)
         {
-            var products =await _service.GetAllProductsAsync();
+            var products =await _service.GetAllProductsAsync(specParams);
             return Ok(products);
         }
         [Authorize(Roles ="Admin")]

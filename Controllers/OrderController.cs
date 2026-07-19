@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-//using System.Web.Http;
 
 namespace ecommerceAPI.Controllers
 {
@@ -40,53 +39,71 @@ namespace ecommerceAPI.Controllers
 
         [Authorize]
         [HttpGet("{orderId}")]
-        public async Task<ActionResult<OrderDto>> OrderById(int OrderId)
+        public async Task<ActionResult<OrderDto>> OrderById([FromRoute] int orderId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var result = await service.GetOrderByIdAsync(OrderId, userId);
+            if (userId == null)
+                return Unauthorized();
+            var result = await service.GetOrderByIdAsync(orderId, userId);
+            if (result == null)
+                return NotFound();
             return Ok(result);
-        }
-
-        [Authorize]
-        [HttpPost("CreateOrder")]
-        public async Task<ActionResult> CreateOrder(CreateOrderDto dto)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var result = await service.CreateOrderAsync(userId, dto);
-            return Ok(result);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPut]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> UpdateOrderStatus(int orderId, UpdateOrderStatusDto dto)
-        {
-            var result = service.UpdateOrderStatus(orderId, dto);
-            return Ok(result);
-        }
-        
-        [Authorize]
-        [HttpPost("CancelOrder")]
-        public async Task<ActionResult> CancelOrder(int orderId)
-        {
-            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var result = service.CancelOrder(orderId);
-            return Ok(result);
-        }
-        
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("DeleteOrder")]
-        public async Task<ActionResult> DeleteOrder(int orderId)
-        {
-            await service.DeleteOrder(orderId);
-            return NoContent();
         }
         
         [Authorize(Roles = "Admin")]
         [HttpGet("GetOrdersByStatus")]
         public async Task<ActionResult> GetOrdersByStatus(OrderStatus status)
         {
-            var result = await service.GetOrderByStatusAsync(status);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return Unauthorized();
+            var result = await service.GetOrderByStatusAsync(userId,status);
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("CreateOrder")]
+        public async Task<ActionResult> ConfirmedOrder()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await service.CreateOrderAsync(userId);
+            if (!result)
+                return BadRequest("Unable to create order.");
+
+            return Ok("Order created successfully.");
+        }
+
+        [Authorize] 
+        [HttpPatch("{orderId}/cancel")]
+        public async Task<ActionResult> CancelOrder(int orderId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return Unauthorized();
+            await service.CancelOrder(userId, orderId);
+            return Ok("Order cancelled successfully.");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrderStatus( UpdateOrderStatusDto dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return Unauthorized();
+            await service.UpdateOrderStatus( dto);
+            return Ok("Order status updated successfully.");
+        }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{orderId}")]
+        public async Task<ActionResult> DeleteOrder(int orderId)
+        {
+            if (orderId <= 0)
+                return BadRequest("Invalid order id.");
+
+            await service.DeleteOrder(orderId);
+            return Ok();
         }
         
     }

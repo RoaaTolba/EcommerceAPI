@@ -76,5 +76,18 @@ namespace ecommerceAPI.Controllers
                 return NotFound();
             return Ok();
         }
+
+        //[HttpPost("fromToOrder")]
+        //[Authorize]
+        //public async Task<IActionResult> AddToOrder()
+        //{
+        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //    var newItem = await service.MoveToOrder(userId);
+        //    if (!newItem)
+        //        return BadRequest("Unable to create order.");
+
+        //    return Ok("Order created successfully.");
+        //}
     }
 }
