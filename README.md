@@ -349,8 +349,8 @@ This project is licensed under the MIT License.
 
 Junior .NET Backend Developer
 
-* LinkedIn: *Add your LinkedIn profile*
-* GitHub: *Add your GitHub profile*
+* LinkedIn: *https://www.linkedin.com/in/roaa-tolba-709b76226/*
+* GitHub: *https://github.com/RoaaTolba*
 
 ---
 
